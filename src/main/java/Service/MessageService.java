@@ -34,8 +34,23 @@ public class MessageService {
    return null;
 
     }
+    public void deleteMessageById(int message_id){
+        messageDAO.deleteMessage(message_id);
+    }
 
-    public Object getMessageById(String path) {
+    public Object deleteMessageById(String pathParam) {
         return null;
     }
+
+    public Message updateFlight(int message_id, Message message){
+
+        if(message!=null ){
+            messageDAO.updateMessage(message_id, message);
+            return messageDAO.getMessageByMessageId(message_id); 
+    }
+
+    else 
+       return null ;  
+    
+}
 }

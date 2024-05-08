@@ -37,10 +37,14 @@ public class SocialMediaController {
         Javalin app = Javalin.create();
         app.get("example-endpoint", this::exampleHandler);
         app.get("/messages", this::getAllMessagesHandler);
-        app.get("/messages/{message_id}", this::getMessageHandler);
+        // app.get("/messages/{message_id}", this::getMessageHandler);
 
         app.post("/messages", this::postMessageHandler);
-        app.post("/login", this::postAccountHandler);
+        app.post("/login", this::postLoginHandler);
+        app.post("/register", this::postRegisterHandler);
+        app.delete("/messages/{message_id}", ctx->{
+            messageService.deleteMessageById(ctx.pathParam("message_id"));
+        });
 
         return app;
     }
@@ -58,9 +62,9 @@ public class SocialMediaController {
         ctx.json(messages);
     }
 
-    private void getMessageHandler(Context ctx) {
-      ctx.json(messageService.getMessageById(ctx.pathParam("message_id")));
-    }
+    // private void getMessageHandler(Context ctx) {
+    //   ctx.json(messageService.getMessageById(ctx.pathParam("message_id")));
+    // }
 
     private void postMessageHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -73,22 +77,39 @@ public class SocialMediaController {
         }
     }
 
-    private void postAccountHandler(Context ctx) throws JsonProcessingException {
+    private void postLoginHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(ctx.body(), Account.class);
-        String username = mapper.readValue(ctx.body(), Account.class).getUsername();
-        String password = mapper.readValue(ctx.body(), Account.class).getPassword();
-
+   
         Account addedAcount = accountService.addAccount(account);
         if(addedAcount!=null){
-            if(username.equals(addedAcount.getUsername())&&password.equals(addedAcount.getPassword())){
+          
             ctx.json(mapper.writeValueAsString(addedAcount));
-             }
+             
         }
         else{
             ctx.status(401);
         }
     }
+
+    private void postRegisterHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Account account = mapper.readValue(ctx.body(), Account.class);
+   
+        Account addedAcount = accountService.addAccount(account);
+        if(addedAcount!=null){
+          
+            ctx.json(mapper.writeValueAsString(addedAcount));
+             
+        }
+        else{
+            ctx.status(400);
+        }
+    }
+
+    private void deleteMessageHandler(Context ctx) {
+        ctx.json(messageService.deleteMessageById(ctx.pathParam("message_id")));
+      }
 
 
 }

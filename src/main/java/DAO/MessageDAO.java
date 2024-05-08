@@ -81,4 +81,45 @@ public class MessageDAO {
         return null;
     }
 
+    public void deleteMessage(int message_id){
+        Connection connection = ConnectionUtil.getConnection();
+
+    try {  
+        String sql = "DELETE FROM account WHERE message_id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+        preparedStatement.setInt(1,message_id);
+        preparedStatement.executeUpdate(); 
+       
+    } catch(Exception e) {
+        System.out.println(e);
+    }
 }
+
+public void updateMessage(int message_id, Message message){
+    Connection connection = ConnectionUtil.getConnection();
+    try {
+        //Write SQL logic here
+        String sql = "UPDATE message SET posted_by=?,message_text=?,time_posted_epoch=? WHERE message_id=?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+
+        preparedStatement.setInt(1, message.getPosted_by());
+        preparedStatement.setString(2, message.getMessage_text());
+        preparedStatement.setLong(3, message.getTime_posted_epoch());
+        preparedStatement.setInt(4,message_id);
+   
+
+
+        //write PreparedStatement setString and setInt methods here.
+
+
+        preparedStatement.executeUpdate();
+    }catch(SQLException e){
+        System.out.println(e.getMessage());
+    }
+    return;
+}
+    }
+
+

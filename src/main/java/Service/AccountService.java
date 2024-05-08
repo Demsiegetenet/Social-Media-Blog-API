@@ -1,5 +1,7 @@
 package Service;
 
+import java.util.List;
+
 import DAO.AccountDAO;
 import Model.Account;
 
@@ -15,8 +17,19 @@ public class AccountService {
    }
 
    public Account addAccount(Account account) {
-   
-     return accountDAO.insertMessage(account);
+      List<Account> acc = accountDAO.getAllAcount();
+      boolean duplicate = true;
+      for(int i=0;i<acc.size();i++){
+         if(acc.get(i).getUsername()!=account.getUsername())
+         duplicate = false;
+      }
 
+
+      if(duplicate==false && (account.getUsername()!=null &&  account.getPassword().length()>4)){
+          accountDAO.insertAccount(account);
+          return accountDAO.getAccountbyAccountId(account.getAccount_id());
+      }
+      else
+      return null;
    }
 }
