@@ -5,7 +5,9 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import Model.Account;
 import Model.Message;
+import Service.AccountService;
 import Service.MessageService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -18,9 +20,11 @@ import io.javalin.http.Context;
 public class SocialMediaController {
 
     private MessageService messageService;
-
+    private AccountService accountService
+;
     public SocialMediaController(){
         this.messageService = new MessageService();
+        this.accountService = new AccountService();
       
     }
     
@@ -36,7 +40,7 @@ public class SocialMediaController {
         app.get("/messages/{message_id}", this::getMessageHandler);
 
         app.post("/messages", this::postMessageHandler);
-    
+        app.post("/login", this::postAccountHandler);
 
         return app;
     }
@@ -66,6 +70,23 @@ public class SocialMediaController {
             ctx.json(mapper.writeValueAsString(addedMessage));
         }else{
             ctx.status(400);
+        }
+    }
+
+    private void postAccountHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Account account = mapper.readValue(ctx.body(), Account.class);
+        String username = mapper.readValue(ctx.body(), Account.class).getUsername();
+        String password = mapper.readValue(ctx.body(), Account.class).getPassword();
+
+        Account addedAcount = accountService.addAccount(account);
+        if(addedAcount!=null){
+            if(username.equals(addedAcount.getUsername())&&password.equals(addedAcount.getPassword())){
+            ctx.json(mapper.writeValueAsString(addedAcount));
+             }
+        }
+        else{
+            ctx.status(401);
         }
     }
 
