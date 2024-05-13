@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import Model.Message;
+import Model.Message; 
 import Util.ConnectionUtil;
 
 public class MessageDAO {
@@ -17,7 +17,7 @@ public class MessageDAO {
         Connection connection = ConnectionUtil.getConnection(); 
         try {
 
-            String sql = "INSERT INTO message(posted_by,message_text,time_posted_epoch) VALUES(?,?,?,?)" ;
+            String sql = "insert into message (posted_by, message_text, time_posted_epoch) values (?,?,?)" ;
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         
@@ -31,7 +31,7 @@ public class MessageDAO {
 
             if(pkeyResultSet.next()){
                 int generated_message_id = (int) pkeyResultSet.getLong(1);
-                return new Message(message.getPosted_by(),message.getMessage_text(),message.getTime_posted_epoch());
+                return new Message(generated_message_id,message.getPosted_by(),message.getMessage_text(),message.getTime_posted_epoch());
             }
         }catch(SQLException e){
             System.out.println(e.getMessage());

@@ -1,6 +1,6 @@
 package Model;
 /**
- * This is a class that models a Message.
+ * This is a class that models a Message. 
  *
  * DO NOT CHANGE ANYTHING IN THIS CLASS!
  *

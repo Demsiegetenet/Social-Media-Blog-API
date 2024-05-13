@@ -8,7 +8,7 @@ import Model.Message;
 
 public class MessageService {
      private MessageDAO messageDAO;
-     private AccountDAO accountDAO;
+     private AccountDAO accountDAO; 
  
      public MessageService() {
         messageDAO = new MessageDAO();
@@ -30,13 +30,12 @@ public class MessageService {
     }
 
     public Message addMessage(Message message) {
-        List<Account> accounts = accountDAO.getAllAcount();
+        List<Account> accounts = accountDAO.getAllUser();
          for(int i=0;i<accounts.size();i++){
             if(accounts.get(i).getAccount_id()==message.getPosted_by()){
                 if(messageDAO.getMessageByMessageId(message.getMessage_id())==null){
                     if(message.getMessage_text().length()>0 && message.getMessage_text().length()<255){
-                        messageDAO.insertMessage(message);
-                        return messageDAO.getMessageByMessageId(message.getMessage_id());
+                       return messageDAO.insertMessage(message);
                  }
                 return null;
             } 

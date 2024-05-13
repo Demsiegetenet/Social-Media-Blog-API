@@ -16,20 +16,31 @@ public class AccountService {
            this.accountDAO = accountDAO;
    }
 
-   public Account addAccount(Account account) {
-      List<Account> acc = accountDAO.getAllAcount();
-      boolean duplicate = true;
-      for(int i=0;i<acc.size();i++){
-         if(acc.get(i).getUsername()!=account.getUsername())
-         duplicate = false;
+   public Account registerUser(Account account) {
+         
+         List<Account> acc = accountDAO.getAllUser();
+      if(account.getUsername().length()>0 && account.getPassword().length()>=4) {
+         for(int i=0;i<acc.size();i++){
+            if(acc.get(i).getUsername()!=account.getUsername()){
+               return  accountDAO.registerUser(account);
+            }
+            else
+            return null;
+         
+         }
       }
-
-
-      if(duplicate==false && (account.getUsername()!=null &&  account.getPassword().length()>4)){
-          accountDAO.insertAccount(account);
-          return accountDAO.getAccountbyAccountId(account.getAccount_id());
-      }
-      else
-      return null;
+      
+         return null;
    }
+
+   public Account loginUser(Account account){
+    
+       List<Account> accounts = accountDAO.getAllUser();
+       for(int i=0;i<accounts.size();i++){
+         if(accounts.get(i).getUsername().equals(account.getUsername()) && accounts.get(i).getPassword().equals(account.getPassword())){
+             return accounts.get(i);
+         }
+   }
+   return null;
+}
 }

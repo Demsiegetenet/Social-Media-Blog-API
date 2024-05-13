@@ -5,7 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import Model.Account;
+import Model.Account; 
 import Model.Message;
 import Service.AccountService;
 import Service.MessageService;
@@ -81,7 +81,7 @@ public class SocialMediaController {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(ctx.body(), Account.class);
    
-        Account addedAcount = accountService.addAccount(account);
+        Account addedAcount = accountService.loginUser(account);
         if(addedAcount!=null){
           
             ctx.json(mapper.writeValueAsString(addedAcount));
@@ -96,10 +96,10 @@ public class SocialMediaController {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(ctx.body(), Account.class);
    
-        Account addedAcount = accountService.addAccount(account);
-        if(addedAcount!=null){
+        Account registeredAcount = accountService.registerUser(account);
+        if(registeredAcount!=null){
           
-            ctx.json(mapper.writeValueAsString(addedAcount));
+            ctx.json(mapper.writeValueAsString(registeredAcount));
              
         }
         else{
