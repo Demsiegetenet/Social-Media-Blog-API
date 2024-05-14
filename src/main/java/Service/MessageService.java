@@ -58,15 +58,23 @@ public class MessageService {
         return null;
     }
 
-    public Message updateFlight(int message_id, Message message){
+    public Message updateMesage(int message_id, Message message){
 
-        if(message!=null ){
-            messageDAO.updateMessage(message_id, message);
-            return messageDAO.getMessageByMessageId(message_id); 
+    List<Message> messages = messageDAO.getAllMesasages();
+    for(int i=0;i<messages.size();i++){
+        if(message_id==messages.get(i).getMessage_id()){
+           if(message.getMessage_text().length()>0 && message.getMessage_text().length()<=255){
+             messageDAO.updateMessage(message_id, message);
+             return messageDAO.getMessageByMessageId(message_id);
+           }
+           else
+           return null;
+        }
+        else
+        return null;
     }
-
-    else 
        return null ;  
     
 }
+
 }

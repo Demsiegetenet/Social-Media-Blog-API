@@ -3,6 +3,7 @@ package Controller;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import Model.Account; 
@@ -37,7 +38,7 @@ public class SocialMediaController {
         Javalin app = Javalin.create();
         app.get("example-endpoint", this::exampleHandler);
         app.get("/messages", this::getAllMessagesHandler);
-        // app.get("/messages/{message_id}", this::getMessageHandler);
+        app.patch("/messages/{message_id}", this::patchMessageHandler);
 
         app.post("/messages", this::postMessageHandler);
         app.post("/login", this::postLoginHandler);
@@ -107,9 +108,21 @@ public class SocialMediaController {
         }
     }
 
-    private void deleteMessageHandler(Context ctx) {
-        ctx.json(messageService.deleteMessageById(ctx.pathParam("message_id")));
-      }
+    private void patchMessageHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(ctx.body(), Message.class);
+      
+
+        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+        Message updatedMessage = messageService.updateMesage(message_id, message);
+        System.out.println(updatedMessage);
+        if(updatedMessage != null){
+            ctx.json(mapper.writeValueAsString(updatedMessage));
+        }else{
+            ctx.status(400);
+        }
+
+    }
 
 
 }
