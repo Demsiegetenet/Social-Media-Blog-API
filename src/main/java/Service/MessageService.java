@@ -13,7 +13,7 @@ public class MessageService {
      public MessageService() {
         messageDAO = new MessageDAO();
         accountDAO = new AccountDAO();
-
+ 
      }
 
      public MessageService(MessageDAO messageDAO){

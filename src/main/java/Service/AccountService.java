@@ -1,17 +1,22 @@
 package Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import DAO.AccountDAO;
+import DAO.MessageDAO;
 import Model.Account;
+import Model.Message;
 
 public class AccountService {
     private AccountDAO accountDAO;
+    private MessageDAO messageDAO;
 
     public AccountService() {
        accountDAO = new AccountDAO();
+       messageDAO = new MessageDAO();
     }
-
+  
     public AccountService(AccountDAO accountDAO){
            this.accountDAO = accountDAO;
    }
@@ -43,4 +48,20 @@ public class AccountService {
    }
    return null;
 }
+
+public List<Message> getMessageByAccountId(int account_id){
+      List<Message> messages = messageDAO.getAllMesasages();
+      Account account = accountDAO.getAccountByAccountId(account_id);
+      List<Message> filtered_message = new ArrayList<>();
+
+      for(int i=0;i<messages.size();i++){
+            if(account.getAccount_id()==messages.get(i).getPosted_by()){
+               filtered_message.add(messageDAO.getMessageByMessageId(messages.get(i).getMessage_id()));
+               return filtered_message;
+            }
+            else
+            return null;
+      }
+   return null;
+}  
 }

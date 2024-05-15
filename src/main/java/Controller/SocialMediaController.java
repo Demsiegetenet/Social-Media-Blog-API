@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import Model.Account; 
-import Model.Message;
+import Model.Message; 
 import Service.AccountService;
 import Service.MessageService;
 import io.javalin.Javalin;
@@ -41,7 +41,6 @@ public class SocialMediaController {
         app.patch("/messages/{message_id}", this::patchMessageHandler);
         app.get("/messages/{message_id}", this::getMessagesHandler);
         app.get("/accounts/{account_id}/messages", this::getAllMessagesFromUserHandler);
-
         app.post("/messages", this::postMessageHandler);
         app.post("/login", this::postLoginHandler);
         app.post("/register", this::postRegisterHandler);
@@ -126,11 +125,13 @@ public class SocialMediaController {
     private void getAllMessagesFromUserHandler(Context ctx) throws JsonMappingException, JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         int account_id = Integer.parseInt(ctx.pathParam("account_id"));
-        Message message = messageService.getMessageById(account_id);      
-        if(message != null){
+        
+        List<Message> message = accountService.getMessageByAccountId(account_id);      
+        if(message!=null){
             ctx.json(mapper.writeValueAsString(message));
         }else{
             ctx.json("");
+            
         }
     }
 
