@@ -7,6 +7,7 @@ import Model.Account;
 import Model.Message;
 
 public class MessageService {
+
      private MessageDAO messageDAO;
      private AccountDAO accountDAO; 
  
@@ -49,8 +50,6 @@ public class MessageService {
             else
             return null;
          }
-
-    
     return null;
 }
 
@@ -67,7 +66,6 @@ public class MessageService {
        return null;
     }
 
-
     public Message updateMesage(int message_id, Message message){
             List<Message> messages = messageDAO.getAllMesasages();
             for(int i=0;i<messages.size();i++){
@@ -83,6 +81,9 @@ public class MessageService {
                 return null;
             }
             return null ;  
-    
-}
+    }
+
+     public List<Message> getMessageByPostedBy(int posted_by){
+     return messageDAO.getMessageByPostedBy(posted_by);
+     }
 }
